@@ -1,221 +1,243 @@
-<!DOCTYPE html>
-<html lang="zh">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hamilton Space Academy | Yezi's Mission</title>
-    <style>
-        :root {
-            --space-dark: #0b0d17;
-            --cmd-blue: #1a1c2c;
-            --gold: #d4af37;
-            --neon-blue: #5d5dff;
-            --text-gray: #e0e0e0;
-        }
-
-        body {
-            background-color: var(--space-dark);
-            color: var(--text-gray);
-            font-family: 'Segoe UI', 'Courier New', sans-serif;
-            margin: 0;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* 左侧导航栏 - 任务列表 */
-        .sidebar {
-            width: 260px;
-            background: var(--cmd-blue);
-            border-right: 2px solid var(--gold);
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-        }
-
-        .sidebar h2 { color: var(--gold); font-size: 1.2rem; border-bottom: 1px solid var(--gold); padding-bottom: 10px; }
-
-        .mission-btn {
-            background: transparent;
-            border: 1px solid #444;
-            color: white;
-            padding: 12px;
-            margin: 5px 0;
-            text-align: left;
-            cursor: pointer;
-            transition: 0.3s;
-            border-radius: 4px;
-        }
-
-        .mission-btn:hover { background: var(--neon-blue); }
-        .mission-btn.active { border-left: 5px solid var(--gold); background: #2a2d45; }
-
-        /* 主显示区 */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .mission-title { font-size: 2rem; color: var(--gold); margin: 0; }
-
-        .display-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-        }
-
-        /* 视频区 */
-        .video-container {
-            background: #000;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid var(--neon-blue);
-            box-shadow: 0 0 20px rgba(93, 93, 255, 0.2);
-        }
-
-        video { width: 100%; display: block; }
-
-        /* 解密手册 & 游戏区 */
-        .info-panel {
-            background: var(--cmd-blue);
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid #444;
-        }
-
-        .meaning-box { margin-bottom: 20px; line-height: 1.6; }
-        .meaning-box h3 { color: var(--gold); margin-top: 0; }
-
-        .game-box {
-            background: #2a2d45;
-            padding: 15px;
-            border-radius: 8px;
-            border-top: 3px solid var(--neon-blue);
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            background: #0b0d17;
-            border: 1px solid var(--neon-blue);
-            color: white;
-            margin-top: 10px;
-            box-sizing: border-box;
-        }
-
-        .btn-submit {
-            background: var(--gold);
-            color: black;
-            border: none;
-            padding: 10px 20px;
-            margin-top: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            width: 100%;
-        }
-
-        .progress-bar { height: 10px; background: #444; border-radius: 5px; margin-top: 10px; }
-        .progress-fill { height: 100%; width: 0%; background: var(--gold); transition: 0.5s; }
-    </style>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.3">
+  <style type="text/css">
+    body {background-color: #0b0b0f}
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px 'Helvetica Neue'; color: #f7f6ef; -webkit-text-stroke: #f7f6ef}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px 'Helvetica Neue'; color: #f7f6ef; -webkit-text-stroke: #f7f6ef; min-height: 11.0px}
+    span.s1 {font-kerning: none}
+  </style>
 </head>
 <body>
-
-    <div class="sidebar">
-        <h2>🚀 任务列表</h2>
-        <div id="missionList">
-            </div>
-    </div>
-
-    <div class="main-content">
-        <div class="header">
-            <h1 class="mission-title" id="currentTitle">准备起飞...</h1>
-            <div>Yezi 级飞行员 | <span id="completedCount">0</span>/9</div>
-        </div>
-
-        <div class="display-grid">
-            <div class="video-container">
-                <video id="mainPlayer" controls>
-                    <source src="" type="video/mp4">
-                </video>
-            </div>
-
-            <div class="info-panel">
-                <div class="meaning-box">
-                    <h3>📖 解密手册 (Meaning)</h3>
-                    <p id="meaningText">点击左侧任务开始学习歌词背后的秘密。</p>
-                </div>
-
-                <div class="game-box">
-                    <h3>🎯 挑战关卡</h3>
-                    <p id="gameQuestion">等待任务开启...</p>
-                    <input type="text" id="userInput" placeholder="输入答案...">
-                    <button class="btn-submit" onclick="checkAnswer()">验证指令</button>
-                    <div id="feedback" style="margin-top: 10px;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // 这里存放 9 首歌的数据
-        const missions = [
-            { title: "01 Alexander Hamilton", file: "01_Alexander_Hamilton.mp4", meaning: "讲述了一个孤儿如何通过拼命读书和写作，改变了自己的命运。", question: "Hamilton 是通过什么方式离开家乡寻找机会的？(提示: Writing his way...)", answer: "out" },
-            { title: "02 My Shot", file: "02_My_Shot.mp4", meaning: "表达了年轻人不放过任何机会的决心，就像当时刚刚起步的美国。", question: "Hamilton 重复最多的一句话是：I am not throwing away my ____!", answer: "shot" },
-            { title: "07 Non-Stop", file: "07_Non_Stop.mp4", meaning: "展示了惊人的专注力。他写了51篇联邦党人文集，平均每周写一张纸，永不停歇。", question: "这段歌里，Hamilton 一共写了多少篇论文？", answer: "51" },
-            { title: "08 One Last Time", file: "08_One_Last_Time.mp4", meaning: "华盛顿教导我们：伟大的领导者不仅要懂得如何站上巅峰，更要懂得何时优雅地转身离开。", question: "华盛顿退休后想坐在哪种树下休息？", answer: "vine and fig tree" }
-            // 你可以在这里继续补充剩下的 5 首歌...
-        ];
-
-        let currentMissionIndex = 0;
-
-        // 初始化侧边栏
-        const listEl = document.getElementById('missionList');
-        missions.forEach((m, index) => {
-            const btn = document.createElement('button');
-            btn.className = 'mission-btn';
-            btn.innerText = `Mission ${index + 1}: ${m.title}`;
-            btn.onclick = () => loadMission(index);
-            listEl.appendChild(btn);
-        });
-
-        function loadMission(index) {
-            currentMissionIndex = index;
-            const data = missions[index];
-            
-            // 更新标题和视频
-            document.getElementById('currentTitle').innerText = data.title;
-            const player = document.getElementById('mainPlayer');
-            player.src = `videos/${data.file}`; // 确保你的视频在这个路径下
-            player.play();
-
-            // 更新意义和题目
-            document.getElementById('meaningText').innerText = data.meaning;
-            document.getElementById('gameQuestion').innerText = data.question;
-            document.getElementById('feedback').innerText = "";
-            document.getElementById('userInput').value = "";
-
-            // 更新按钮样式
-            const btns = document.querySelectorAll('.mission-btn');
-            btns.forEach((b, i) => b.classList.toggle('active', i === index));
-        }
-
-        function checkAnswer() {
-            const input = document.getElementById('userInput').value.toLowerCase().trim();
-            const correct = missions[currentMissionIndex].answer.toLowerCase();
-            const fb = document.getElementById('feedback');
-
-            if (input.includes(correct)) {
-                fb.innerHTML = "✅ 指令正确！任务达成。";
-                fb.style.color = "#00ff00";
-            } else {
-                fb.innerHTML = "❌ 坐标错误，请重新核对歌词。";
-                fb.style.color = "#ff4444";
-            }
-        }
-    </script>
+<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html lang="en"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;head&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;title&gt;Hamilton Space Academy | Mission Control&lt;/title&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;style&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>:root {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--space-black: #05070a;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--cmd-navy: #121420;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--gold: #d4af37;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--electric-blue: #4d4dff;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--star-white: #f0f0f0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>--success-green: #00ff00;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>body {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: var(--space-black);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--star-white);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin: 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>height: 100vh;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>overflow: hidden;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* Sidebar - Mission Selection */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.sidebar {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 300px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: var(--cmd-navy);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-right: 2px solid var(--gold);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>flex-direction: column;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 20px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 5px 0 15px rgba(0,0,0,0.5);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.sidebar h2 {<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--gold);<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>letter-spacing: 2px;<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-bottom: 1px solid var(--gold);<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding-bottom: 10px;<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>text-align: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.mission-list {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>overflow-y: auto;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>flex-grow: 1;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.mission-btn {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 100%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: rgba(255,255,255,0.05);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border: 1px solid #333;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: var(--star-white);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 15px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin: 8px 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>text-align: left;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>cursor: pointer;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>transition: all 0.3s;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 4px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 0.9rem;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>justify-content: space-between;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.mission-btn:hover { background: var(--electric-blue); border-color: white; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.mission-btn.active { border-left: 6px solid var(--gold); background: #1c1f35; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.status-dot { height: 10px; width: 10px; border-radius: 50%; background: #444; align-self: center; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.status-dot.done { background: var(--success-green); box-shadow: 0 0 5px var(--success-green); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* Main Dashboard */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.main-content {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>flex: 1;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>flex-direction: column;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 30px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>overflow-y: auto;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.mission-title { font-size: 2.2rem; color: var(--gold); margin: 0; text-transform: uppercase; text-shadow: 2px 2px 4px black; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.display-grid {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: grid;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>grid-template-columns: 1.8fr 1fr;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>gap: 25px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* Video Feed */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.video-container {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: #000;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 12px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>overflow: hidden;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border: 2px solid var(--electric-blue);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 0 0 30px rgba(77, 77, 255, 0.3);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>video { width: 100%; aspect-ratio: 16/9; display: block; background: #000; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* Decryption &amp; Game */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.info-panel {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: var(--cmd-navy);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 25px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 12px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border: 1px solid #333;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>flex-direction: column;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>gap: 20px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.meaning-box h3 { color: var(--gold); margin-top: 0; border-left: 4px solid var(--gold); padding-left: 10px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.meaning-box p { line-height: 1.6; font-size: 1.1rem; color: #ccc; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.game-box {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: #1c1f35;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 20px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 10px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-top: 4px solid var(--electric-blue);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.game-box h3 { margin-top: 0; color: var(--star-white); }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>input[type="text"] {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 100%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 12px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: #05070a;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border: 1px solid var(--electric-blue);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: white;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin-top: 15px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 4px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 1rem;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>box-sizing: border-box;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-submit {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: var(--gold);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: black;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border: none;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 12px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin-top: 15px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>cursor: pointer;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-weight: bold;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 100%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 4px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>text-transform: uppercase;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.btn-submit:hover { background: #b8962d; }</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>#feedback { margin-top: 15px; font-weight: bold; text-align: center; height: 24px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;body&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="sidebar"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;h2&gt;🚀 MISSIONS&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="mission-list" id="missionList"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div style="margin-top: 20px; font-size: 0.8rem; color: #666; text-align: center;"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>Hamilton Space Academy © 2026</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="main-content"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="header"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;h1 class="mission-title" id="currentTitle"&gt;Initiating System...&lt;/h1&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div style="background: #222; padding: 10px; border-radius: 8px;"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>CADET YEZI | &lt;span id="completedCount" style="color: var(--gold); font-weight: bold;"&gt;0&lt;/span&gt; / 9 MISSIONS CLEAR</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="display-grid"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="video-container"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;video id="mainPlayer" controls preload="auto"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;source src="" type="video/mp4"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>Your browser does not support the video tag.</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/video&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="info-panel"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="meaning-box"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;📖 Decryption Manual&lt;/h3&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p id="meaningText"&gt;Welcome to the Academy. Please select a mission from the sidebar to begin your training.&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="game-box"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;🎯 Mission Challenge&lt;/h3&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p id="gameQuestion"&gt;Awaiting mission selection...&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;input type="text" id="userInput" placeholder="Type secret word here..." autocomplete="off"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;button class="btn-submit" onclick="checkAnswer()"&gt;Verify Command&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div id="feedback"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// UPDATED 9 MISSIONS - Removed 3rd, 4th, 9th; Added Dear Theodosia, Yorktown Battle, Guns and Ships</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const missions = [</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ title: "Alexander Hamilton", file: "hamilton.mp4", meaning: "Discover how an orphan changed his destiny through the power of reading and writing. He proved that where you come from doesn't limit where you can go.", question: "How did Hamilton get out of his hometown? (Clue: Writing his way ____)", answer: "out" },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ title: "My Shot", file: "my_shot.mp4", meaning: "A song about ambition and seizing every opportunity. He is 'young, scrappy, and hungry' and won't let his chance slip away.", question: "Complete the iconic line: I am not throwing away my ____!", answer: "shot" },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ title: "Dear Theodosia", file: "dear_theodosia.mp4", meaning: "A father's promise to his child. Hamilton and Burr share their hopes and dreams for the next generation.", question: "What do they promise to make for their children? (Make the world ____)", answer: "better" },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ title: "Guns and Ships", file: "guns_and_ships.mp4", meaning: "The fastest rap in the show! Lafayette shows incredible skill and energy in the revolutionary effort.", question: "Who does Lafayette say they need? (We need ____)", answer: "hamilton" },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ title: "Satisfied", file: "satisfied.mp4", meaning: "A story of sacrifice. Angelica puts her sister Eliza's happiness above her own feelings. A very brave choice.", question: "What is the famous toast Angelica makes? To the bride! To the ____!", answer: "groom" },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ title: "Wait For It", file: "wait_for_it.mp4", meaning: "Burr explains his philosophy: while Hamilton rushes in, Burr waits for the right moment. What are you willing to wait for?", question: "Burr says: I am the one thing in life I can ____.", answer: "control" },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ title: "Yorktown Battle”, file: "yorktown_battle.mp4", meaning: "The final battle of the Revolutionary War. Victory is won through strategy, courage, and teamwork.", question: "What did they fight for? The world turned upside ____!", answer: "down" },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ title: "Non-Stop", file: "non_stop.mp4", meaning: "Witness Hamilton's legendary work ethic. He wrote 51 of the 85 Federalist Papers in six months—never stopping!", question: "How many essays did Hamilton write in this song?", answer: "51" },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ title: "One Last Time", file: "one_last_time.mp4", meaning: "Washington shows true leadership by stepping down from power. He wants to teach the nation how to say goodbye.", question: "Washington wants to sit under his own vine and ____ tree.", answer: "fig" }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>];</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let currentMissionIndex = -1;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let completedMissions = new Set();</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Build Sidebar</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const listEl = document.getElementById('missionList');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>missions.forEach((m, index) =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const btn = document.createElement('button');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>btn.className = 'mission-btn';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>btn.id = `btn-${index}`;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>btn.innerHTML = `&lt;span&gt;Mission 0${index + 1}: ${m.title}&lt;/span&gt;&lt;div class="status-dot" id="dot-${index}"&gt;&lt;/div&gt;`;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>btn.onclick = () =&gt; loadMission(index);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>listEl.appendChild(btn);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>fun</span></p>
 </body>
 </html>
