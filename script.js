@@ -2,7 +2,7 @@ const lyricsDatabase = [
     {
         title: "One Last Time (Washington's Farewell)",
         // 尝试这个 ID，如果还是不行，可能是因为这个特定视频限制了嵌入
-        youtubeId: "vW29-I_YV70", 
+        youtubeId: "CPgDZBADR3Y", 
         missions: [
             { question: "What tree does Washington want to sit under?", answer: "fig", clue: "A sweet purple fruit." },
             { question: "Which word means 'being thankful'?", answer: "gratitude", clue: "Starts with 'G'." }
