@@ -7,9 +7,9 @@
   <meta name="Generator" content="Cocoa HTML Writer">
   <meta name="CocoaVersion" content="2685.3">
   <style type="text/css">
-    body {background-color: #0b0b0f}
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px 'Helvetica Neue'; color: #f7f6ef; -webkit-text-stroke: #f7f6ef}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px 'Helvetica Neue'; color: #f7f6ef; -webkit-text-stroke: #f7f6ef; min-height: 11.0px}
+    body {background-color: #0b0b0d}
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px 'Helvetica Neue'; color: #f5f4eb; -webkit-text-stroke: #f5f4eb}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px 'Helvetica Neue'; color: #f5f4eb; -webkit-text-stroke: #f5f4eb; min-height: 11.0px}
     span.s1 {font-kerning: none}
   </style>
 </head>
@@ -219,7 +219,7 @@
 <p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ title: "Guns and Ships", file: "guns_and_ships.mp4", meaning: "The fastest rap in the show! Lafayette shows incredible skill and energy in the revolutionary effort.", question: "Who does Lafayette say they need? (We need ____)", answer: "hamilton" },</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ title: "Satisfied", file: "satisfied.mp4", meaning: "A story of sacrifice. Angelica puts her sister Eliza's happiness above her own feelings. A very brave choice.", question: "What is the famous toast Angelica makes? To the bride! To the ____!", answer: "groom" },</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ title: "Wait For It", file: "wait_for_it.mp4", meaning: "Burr explains his philosophy: while Hamilton rushes in, Burr waits for the right moment. What are you willing to wait for?", question: "Burr says: I am the one thing in life I can ____.", answer: "control" },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ title: "Yorktown Battle”, file: "yorktown_battle.mp4", meaning: "The final battle of the Revolutionary War. Victory is won through strategy, courage, and teamwork.", question: "What did they fight for? The world turned upside ____!", answer: "down" },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ title: "Yorktown Battle, file: "yorktown_battle.mp4", meaning: "The final battle of the Revolutionary War. Victory is won through strategy, courage, and teamwork.", question: "What did they fight for? The world turned upside ____!", answer: "down" },</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ title: "Non-Stop", file: "non_stop.mp4", meaning: "Witness Hamilton's legendary work ethic. He wrote 51 of the 85 Federalist Papers in six months—never stopping!", question: "How many essays did Hamilton write in this song?", answer: "51" },</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ title: "One Last Time", file: "one_last_time.mp4", meaning: "Washington shows true leadership by stepping down from power. He wants to teach the nation how to say goodbye.", question: "Washington wants to sit under his own vine and ____ tree.", answer: "fig" }</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>];</span></p>
@@ -238,6 +238,65 @@
 <p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>listEl.appendChild(btn);</span></p>
 <p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
 <p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>fun</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function loadMission(index) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>currentMissionIndex = index;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const data = missions[index];</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// Update Title &amp; Video</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('currentTitle').innerText = data.title;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const player = document.getElementById('mainPlayer');</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// Video path</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>player.src = `videos/${data.file}`;<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>player.load();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>player.play().catch(e =&gt; console.log("Auto-play blocked or file missing."));</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// Update Text content</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('meaningText').innerText = data.meaning;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('gameQuestion').innerText = data.question;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('feedback').innerText = "";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('userInput').value = "";</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// UI Styling</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.mission-btn').forEach((b, i) =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>b.classList.toggle('active', i === index);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById('userInput').focus();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function checkAnswer() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (currentMissionIndex === -1) return;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const input = document.getElementById('userInput').value.toLowerCase().trim();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const correct = missions[currentMissionIndex].answer.toLowerCase();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const fb = document.getElementById('feedback');</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (input.includes(correct)) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>fb.innerHTML = "✅ ACCESS GRANTED. MISSION CLEAR!";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>fb.style.color = "var(--success-green)";</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>// Track Progress</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>completedMissions.add(currentMissionIndex);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById(`dot-${currentMissionIndex}`).classList.add('done');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('completedCount').innerText = completedMissions.size;</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (completedMissions.size === 9) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>alert("CONGRATULATIONS CADET YEZI! YOU ARE A GRADUATE OF THE HAMILTON SPACE ACADEMY!");</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>fb.innerHTML = "❌ ERROR: INCORRECT DATA. LISTEN AGAIN.";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>fb.style.color = "#ff4444";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Allow Enter key to submit</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>document.getElementById("userInput").addEventListener("keyup", function(event) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (event.key === "Enter") {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>checkAnswer();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
 </body>
 </html>
