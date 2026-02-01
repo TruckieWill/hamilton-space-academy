@@ -12,33 +12,29 @@ const lyricsDatabase = [
 let currentMissionIndex = 0;
 
 function loadMission() {
-    // 抓取 HTML 里的“仪表盘”组件
     const quizContent = document.getElementById('quiz-content');
     const videoContainer = document.getElementById('video-container');
-    const currentMission = lyricsDatabase[currentMissionIndex];
-
+    
     if (!quizContent || !videoContainer) return;
 
-    // 1. 加载 YouTube 视频
+    const currentMission = lyricsDatabase[currentMissionIndex];
+
     videoContainer.innerHTML = `
-        <div style="margin-bottom: 20px;">
-            <iframe width="100%" height="315" 
+        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+            <iframe style="position:absolute;top:0;left:0;width:100%;height:100%;" 
                 src="https://www.youtube.com/embed/${currentMission.youtubeId}" 
-                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen>
+                frameborder="0" allowfullscreen>
             </iframe>
         </div>`;
 
-    // 2. 加载闯关题目
-    let missionHTML = `<h2>Current Mission: ${currentMission.title}</h2>`;
+    let missionHTML = `<h2>${currentMission.title}</h2>`;
     currentMission.missions.forEach((m, index) => {
         missionHTML += `
-            <div class="quiz-box">
+            <div class="quiz-box" style="background:rgba(255,255,255,0.1);padding:20px;margin:10px;border-radius:10px;">
                 <p>Task ${index + 1}: ${m.question}</p>
-                <input type="text" id="ans-${index}" placeholder="Type answer...">
+                <input type="text" id="ans-${index}" placeholder="Answer...">
                 <button onclick="checkAnswer(${index}, '${m.answer}')">Submit</button>
-            </div>
-        `;
+            </div>`;
     });
     
     quizContent.innerHTML = missionHTML;
@@ -49,9 +45,8 @@ function checkAnswer(index, correctAns) {
     if (userAns === correctAns) {
         alert("🚀 Mission Accomplished!");
     } else {
-        alert("🛰️ Signal Lost. Try again! Hint: " + lyricsDatabase[currentMissionIndex].missions[index].clue);
+        alert("🛰️ Try again! Hint: " + lyricsDatabase[currentMissionIndex].missions[index].clue);
     }
 }
 
-// 确保页面加载完成后再执行
 document.addEventListener('DOMContentLoaded', loadMission);
