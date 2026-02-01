@@ -21,7 +21,34 @@ const lyricsDatabase = [
         ]
     }
 ];
+const lyricsDatabase = [
+    {
+        title: "One Last Time (Washington's Farewell)",
+        youtubeId: "vW29-I_YV70", // 这是 YouTube 链接结尾的那串代码
+        missions: [
+            { question: "What tree does Washington want to sit under?", answer: "fig", clue: "A sweet purple fruit." }
+        ]
+    }
+    // ... 其他歌曲同理
+];
 
+function loadMission() {
+    const missionContainer = document.getElementById('quiz-content');
+    const videoContainer = document.getElementById('video-container');
+    const currentMission = lyricsDatabase[currentMissionIndex];
+
+    // 1. 加载 YouTube 嵌入式播放器
+    videoContainer.innerHTML = `
+        <iframe width="100%" height="315" 
+            src="https://www.youtube.com/embed/${currentMission.youtubeId}" 
+            frameborder="0" allowfullscreen>
+        </iframe>`;
+
+    // 2. 加载闯关题目 (保持原逻辑)
+    let missionHTML = `<h2>Current Mission: ${currentMission.title}</h2>`;
+    // ... (后面接你之前的闯关代码)
+    missionContainer.innerHTML = missionHTML;
+}
 let currentMissionIndex = 0;
 
 function loadMission() {
